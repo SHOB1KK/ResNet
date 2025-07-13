@@ -1,0 +1,12 @@
+C:\Users\user\Desktop\ResNet\ResNet.Doman\obj\Debug\net9.0\ResNet.Doman.csproj.AssemblyReference.cache
+C:\Users\user\Desktop\ResNet\ResNet.Doman\obj\Debug\net9.0\ResNet.Doman.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\Desktop\ResNet\ResNet.Doman\obj\Debug\net9.0\ResNet.Doman.AssemblyInfoInputs.cache
+C:\Users\user\Desktop\ResNet\ResNet.Doman\obj\Debug\net9.0\ResNet.Doman.AssemblyInfo.cs
+C:\Users\user\Desktop\ResNet\ResNet.Doman\obj\Debug\net9.0\ResNet.Doman.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\ResNet\ResNet.Doman\bin\Debug\net9.0\ResNet.Doman.deps.json
+C:\Users\user\Desktop\ResNet\ResNet.Doman\bin\Debug\net9.0\ResNet.Doman.dll
+C:\Users\user\Desktop\ResNet\ResNet.Doman\bin\Debug\net9.0\ResNet.Doman.pdb
+C:\Users\user\Desktop\ResNet\ResNet.Doman\obj\Debug\net9.0\ResNet.Doman.dll
+C:\Users\user\Desktop\ResNet\ResNet.Doman\obj\Debug\net9.0\refint\ResNet.Doman.dll
+C:\Users\user\Desktop\ResNet\ResNet.Doman\obj\Debug\net9.0\ResNet.Doman.pdb
+C:\Users\user\Desktop\ResNet\ResNet.Doman\obj\Debug\net9.0\ref\ResNet.Doman.dll

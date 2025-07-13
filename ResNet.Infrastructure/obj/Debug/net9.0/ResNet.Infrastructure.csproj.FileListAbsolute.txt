@@ -1,0 +1,15 @@
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ResNet.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ResNet.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ResNet.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ResNet.Infrastructure.AssemblyInfo.cs
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ResNet.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\bin\Debug\net9.0\ResNet.Infrastructure.deps.json
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\bin\Debug\net9.0\ResNet.Infrastructure.dll
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\bin\Debug\net9.0\ResNet.Infrastructure.pdb
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\bin\Debug\net9.0\ResNet.Doman.dll
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\bin\Debug\net9.0\ResNet.Doman.pdb
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ResNet.I.53B6E3EB.Up2Date
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ResNet.Infrastructure.dll
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\refint\ResNet.Infrastructure.dll
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ResNet.Infrastructure.pdb
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ref\ResNet.Infrastructure.dll

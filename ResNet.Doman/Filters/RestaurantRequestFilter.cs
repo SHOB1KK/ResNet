@@ -1,0 +1,15 @@
+namespace ResNet.Domain.Filters;
+
+public class RequestFilter
+{
+    public string? Name { get; set; }
+    public string? Cuisine { get; set; }
+    public string? Address { get; set; }
+    public string? OwnerFullName { get; set; }
+    public string? OwnerEmail { get; set; }
+    public string? OwnerPhone { get; set; }
+    public string? Status { get; set; }
+
+    public int PageNumber { get; set; }
+    public int PageSize { get; set; }
+}
