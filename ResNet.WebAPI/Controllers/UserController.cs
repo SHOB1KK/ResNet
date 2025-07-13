@@ -55,10 +55,21 @@ public class UserController(IUserService userService)
         return await userService.ChangePasswordAsync(id, dto.CurrentPassword, dto.NewPassword);
     }
 
-    [HttpPut("{id}/photo")]
-    public async Task<Response<string>> UpdateUserPhoto(string id, [FromBody] string? newPhotoUrl)
+    [HttpPost("{id:int}/photo")]
+    [RequestSizeLimit(10_000_000)]
+    [Consumes("multipart/form-data")]
+    public async Task<Response<string>> UploadUserPhoto([FromRoute] string id, [FromForm] UploadImageDto dto)
     {
-        return await userService.UpdateUserPhotoAsync(id, newPhotoUrl);
+        if (dto?.Image == null || dto.Image.Length == 0)
+            return new Response<string>(System.Net.HttpStatusCode.BadRequest, "File is required");
+
+        return await userService.UploadUserImageAsync(id, dto.Image);
+    }
+
+    [HttpDelete("{id}/photo")]
+    public async Task<Response<string>> DeleteUserPhoto([FromRoute] string id)
+    {
+        return await userService.DeleteUserImageAsync(id);
     }
 
     [HttpGet("check-username")]

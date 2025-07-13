@@ -331,11 +331,29 @@ namespace ResNet.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("BookingTime")
+                    b.Property<string>("BookingCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("BookingFrom")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("BookingTo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Guests")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -345,14 +363,9 @@ namespace ResNet.Infrastructure.Migrations
                     b.Property<int>("TableId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("TableId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
                 });
@@ -376,7 +389,7 @@ namespace ResNet.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("RestaurantId")
+                    b.Property<int?>("RestaurantId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -391,6 +404,9 @@ namespace ResNet.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -408,15 +424,21 @@ namespace ResNet.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("TableId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("TableId");
 
                     b.ToTable("Orders");
                 });
@@ -466,6 +488,9 @@ namespace ResNet.Infrastructure.Migrations
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -541,6 +566,21 @@ namespace ResNet.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Restaurants");
+                });
+
+            modelBuilder.Entity("RestaurantCategory", b =>
+                {
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("RestaurantId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("RestaurantCategories");
                 });
 
             modelBuilder.Entity("RestaurantRequest", b =>
@@ -689,33 +729,28 @@ namespace ResNet.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ResNet.Domain.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Table");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ResNet.Domain.Entities.Category", b =>
                 {
-                    b.HasOne("ResNet.Domain.Entities.Restaurant", "Restaurant")
+                    b.HasOne("ResNet.Domain.Entities.Restaurant", null)
                         .WithMany("Categories")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Restaurant");
+                        .HasForeignKey("RestaurantId");
                 });
 
             modelBuilder.Entity("ResNet.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("ResNet.Domain.Entities.ApplicationUser", "User")
+                    b.HasOne("ResNet.Domain.Entities.ApplicationUser", null)
                         .WithMany("Orders")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("ApplicationUserId");
 
-                    b.Navigation("User");
+                    b.HasOne("Table", "Table")
+                        .WithMany()
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Table");
                 });
 
             modelBuilder.Entity("ResNet.Domain.Entities.OrderItem", b =>
@@ -764,6 +799,25 @@ namespace ResNet.Infrastructure.Migrations
                     b.Navigation("Restaurant");
                 });
 
+            modelBuilder.Entity("RestaurantCategory", b =>
+                {
+                    b.HasOne("ResNet.Domain.Entities.Category", "Category")
+                        .WithMany("RestaurantCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResNet.Domain.Entities.Restaurant", "Restaurant")
+                        .WithMany("RestaurantCategories")
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Restaurant");
+                });
+
             modelBuilder.Entity("Table", b =>
                 {
                     b.HasOne("ResNet.Domain.Entities.Restaurant", "Restaurant")
@@ -785,6 +839,8 @@ namespace ResNet.Infrastructure.Migrations
             modelBuilder.Entity("ResNet.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Products");
+
+                    b.Navigation("RestaurantCategories");
                 });
 
             modelBuilder.Entity("ResNet.Domain.Entities.Order", b =>
@@ -804,6 +860,8 @@ namespace ResNet.Infrastructure.Migrations
                     b.Navigation("Categories");
 
                     b.Navigation("Menu");
+
+                    b.Navigation("RestaurantCategories");
 
                     b.Navigation("Tables");
                 });

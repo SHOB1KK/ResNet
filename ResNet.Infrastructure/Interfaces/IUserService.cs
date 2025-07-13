@@ -1,4 +1,5 @@
 using Domain.Responses;
+using Microsoft.AspNetCore.Http;
 using ResNet.Domain.Dtos;
 
 namespace Infrastructure.Interfaces;
@@ -12,6 +13,7 @@ public interface IUserService
     Task<Response<string>> ChangeUserRoleAsync(string userId, string newRole);
     Task<Response<string>> LockUnlockUserAsync(string userId, bool lockUser);
     Task<Response<string>> ChangePasswordAsync(string userId, string currentPassword, string newPassword);
-    Task<Response<string>> UpdateUserPhotoAsync(string userId, string? newPhotoUrl);
+    Task<Response<string>> UploadUserImageAsync(string userId, IFormFile file);
+    Task<Response<string>> DeleteUserImageAsync(string userId);
     Task<Response<bool>> IsUsernameTakenAsync(string username);
 }

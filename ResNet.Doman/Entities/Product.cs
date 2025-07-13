@@ -33,6 +33,7 @@ namespace ResNet.Domain.Entities
         [Required]
         public int CategoryId { get; set; }
         public Category Category { get; set; } = null!;
+        public string? CategoryName { get; set; }
 
         public List<OrderItem> OrderItems { get; set; } = new();
     }

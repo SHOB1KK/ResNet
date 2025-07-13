@@ -3,6 +3,7 @@ using AutoMapper;
 using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ResNet.Domain.Dtos;
@@ -14,6 +15,7 @@ namespace Infrastructure.Services;
 public class CategoryService(
     DataContext context,
     IMapper mapper,
+    IFileService fileService,
     ILogger<CategoryService> logger
 ) : ICategoryService
 {
@@ -148,5 +150,54 @@ public class CategoryService(
             return new Response<string>(HttpStatusCode.BadRequest, "Category not deleted");
 
         return Response<string>.Success("Category deleted successfully");
+    }
+
+    public async Task<Response<string>> UploadCategoryImageAsync(int categoryId, IFormFile file)
+    {
+        logger.LogInformation("UploadCategoryImageAsync called with categoryId={Id}", categoryId);
+
+        var category = await context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
+        if (category == null)
+            return new Response<string>(HttpStatusCode.NotFound, "Category not found");
+
+        if (file == null || file.Length == 0)
+            return new Response<string>(HttpStatusCode.BadRequest, "File is empty");
+
+        var imageUrl = await fileService.UploadFileAsync(file, "categories");
+
+        if (!string.IsNullOrWhiteSpace(category.ImageUrl))
+            await fileService.DeleteFileAsync(category.ImageUrl);
+
+        category.ImageUrl = imageUrl;
+
+        var result = await context.SaveChangesAsync();
+        if (result == 0)
+            return new Response<string>(HttpStatusCode.BadRequest, "Failed to update category image");
+
+        return Response<string>.Success(imageUrl);
+    }
+
+    public async Task<Response<string>> DeleteCategoryImageAsync(int categoryId)
+    {
+        logger.LogInformation("DeleteCategoryImageAsync called with categoryId={Id}", categoryId);
+
+        var category = await context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
+        if (category == null)
+            return new Response<string>(HttpStatusCode.NotFound, "Category not found");
+
+        if (string.IsNullOrWhiteSpace(category.ImageUrl))
+            return new Response<string>(HttpStatusCode.BadRequest, "No image to delete");
+
+        var deleted = await fileService.DeleteFileAsync(category.ImageUrl);
+        if (!deleted)
+            return new Response<string>(HttpStatusCode.BadRequest, "Failed to delete image file");
+
+        category.ImageUrl = null;
+
+        var result = await context.SaveChangesAsync();
+        if (result == 0)
+            return new Response<string>(HttpStatusCode.BadRequest, "Failed to update category after deleting image");
+
+        return Response<string>.Success("Category image deleted successfully");
     }
 }

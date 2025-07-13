@@ -148,17 +148,19 @@ public class TableService(
         return Response<string>.Success("Table deleted successfully");
     }
 
-    public async Task<Response<bool>> IsTableAvailableAsync(int tableId, DateTime bookingTime, TimeSpan duration)
+    public async Task<Response<bool>> IsTableAvailableAsync(int tableId, DateTime bookingStart, TimeSpan duration)
     {
-        logger.LogInformation("IsTableAvailableAsync called with tableId={TableId}, bookingTime={BookingTime}, duration={Duration}", tableId, bookingTime, duration);
+        logger.LogInformation("IsTableAvailableAsync called with tableId={TableId}, bookingStart={BookingStart}, duration={Duration}", tableId, bookingStart, duration);
+
+        var requestedStart = bookingStart;
+        var requestedEnd = requestedStart.Add(duration);
 
         var overlapExists = await context.Bookings.AnyAsync(b =>
             b.TableId == tableId &&
             b.Status != BookingStatus.Cancelled &&
             (
-                (bookingTime >= b.BookingTime && bookingTime < b.BookingTime.Add(duration)) ||
-                (bookingTime.Add(duration) > b.BookingTime && bookingTime.Add(duration) <= b.BookingTime.Add(duration)) ||
-                (bookingTime <= b.BookingTime && bookingTime.Add(duration) >= b.BookingTime.Add(duration))
+                b.BookingFrom < requestedEnd &&
+                b.BookingTo > requestedStart
             )
         );
 
@@ -177,18 +179,17 @@ public class TableService(
         if (dateTime.HasValue)
         {
             var checkDuration = duration ?? TimeSpan.FromHours(DefaultBookingDurationHours);
-            var targetStart = dateTime.Value;
-            var targetEnd = targetStart.Add(checkDuration);
+            var requestedStart = dateTime.Value;
+            var requestedEnd = requestedStart.Add(checkDuration);
 
             var bookedTableIds = await context.Bookings
                 .Where(b => b.Table.RestaurantId == restaurantId
                             && b.Status != BookingStatus.Cancelled
                             && (
-                                (b.BookingTime >= targetStart && b.BookingTime < targetEnd) ||
-                                (b.BookingTime.AddHours(DefaultBookingDurationHours) > targetStart && b.BookingTime.AddHours(DefaultBookingDurationHours) <= targetEnd) ||
-                                (b.BookingTime <= targetStart && b.BookingTime.AddHours(DefaultBookingDurationHours) >= targetEnd)
-                               )
-                       )
+                                b.BookingFrom < requestedEnd &&
+                                b.BookingTo > requestedStart
+                            )
+                      )
                 .Select(b => b.TableId)
                 .ToListAsync();
 

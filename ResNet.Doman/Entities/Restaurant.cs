@@ -36,5 +36,7 @@ namespace ResNet.Domain.Entities
         public List<Category> Categories { get; set; } = new();
 
         public List<Product> Menu { get; set; } = new();
+        public List<RestaurantCategory> RestaurantCategories { get; set; } = new List<RestaurantCategory>();
+
     }
 }

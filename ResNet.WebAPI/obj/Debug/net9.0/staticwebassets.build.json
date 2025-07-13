@@ -1,12 +1,20 @@
 {
   "Version": 1,
-  "Hash": "BdcbUdb553ZjqaO6YFKeH+8BzNmm3u2Yn/MM5Ota0p4=",
+  "Hash": "MNmrt+9cESODCcGGuUtrRBiLo2YXCWmne9/6lHbTAT4=",
   "Source": "ResNet.WebAPI",
   "BasePath": "_content/ResNet.WebAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "ResNet.WebAPI\\wwwroot",
+      "Source": "ResNet.WebAPI",
+      "ContentRoot": "C:\\Users\\user\\Desktop\\ResNet\\resnet.WebApi\\wwwroot\\",
+      "BasePath": "_content/ResNet.WebAPI",
+      "Pattern": "**"
+    }
+  ],
   "Assets": [],
   "Endpoints": []
 }

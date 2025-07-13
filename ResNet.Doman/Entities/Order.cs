@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Domain.Constants;
 using ResNet.Domain.Constants;
 using ResNet.Domain.Entities;
 
@@ -10,8 +11,6 @@ namespace ResNet.Domain.Entities
     {
         public int Id { get; set; }
 
-        public string? UserId { get; set; }
-        public ApplicationUser? User { get; set; }
         public List<OrderItem> OrderItems { get; set; }
 
         [Range(0, double.MaxValue)]
@@ -23,8 +22,14 @@ namespace ResNet.Domain.Entities
 
         public List<OrderItem> Items { get; set; } = new();
 
+        public string Type { get; set; } = OrderType.Pickup;
+
         public string? FullName { get; set; }
         public string? PhoneNumber { get; set; }
         public string? DeliveryAddress { get; set; }
+
+        public int? TableId { get; set; }
+        public Table? Table { get; set; }
+
     }
 }

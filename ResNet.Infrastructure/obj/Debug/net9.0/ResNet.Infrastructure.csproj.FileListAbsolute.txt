@@ -13,3 +13,4 @@ C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ResNet.Infra
 C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\refint\ResNet.Infrastructure.dll
 C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ResNet.Infrastructure.pdb
 C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ref\ResNet.Infrastructure.dll
+C:\Users\user\Desktop\ResNet\ResNet.Infrastructure\obj\Debug\net9.0\ResNet.Infrastructure.sourcelink.json

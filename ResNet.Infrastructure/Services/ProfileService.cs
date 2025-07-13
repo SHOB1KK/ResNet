@@ -3,6 +3,7 @@ using AutoMapper;
 using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using ResNet.Domain.Dtos;
@@ -13,6 +14,7 @@ namespace Infrastructure.Services;
 public class ProfileService(
     UserManager<ApplicationUser> userManager,
     IMapper mapper,
+    IFileService fileService,
     ILogger<ProfileService> logger
 ) : IProfileService
 {
@@ -103,16 +105,21 @@ public class ProfileService(
         return Response<string>.Success("Password changed successfully");
     }
 
-    public async Task<Response<string>> UpdateProfileImageAsync(string userId, string imageUrl)
+    public async Task<Response<string>> UploadProfileImageAsync(string userId, IFormFile file)
     {
-        logger.LogInformation("UpdateProfileImageAsync called for userId={UserId}", userId);
+        logger.LogInformation("UploadProfileImageAsync called for userId={UserId}", userId);
 
         var user = await userManager.FindByIdAsync(userId);
         if (user == null)
-        {
-            logger.LogWarning("User with id={UserId} not found", userId);
             return new Response<string>(HttpStatusCode.NotFound, "User not found");
-        }
+
+        if (file == null || file.Length == 0)
+            return new Response<string>(HttpStatusCode.BadRequest, "File is empty");
+
+        var imageUrl = await fileService.UploadFileAsync(file, "profiles");
+
+        if (!string.IsNullOrWhiteSpace(user.ImageUrl))
+            await fileService.DeleteFileAsync(user.ImageUrl);
 
         user.ImageUrl = imageUrl;
 
@@ -123,8 +130,9 @@ public class ProfileService(
             return new Response<string>(HttpStatusCode.BadRequest, error);
         }
 
-        return Response<string>.Success("Profile image updated successfully");
+        return Response<string>.Success(imageUrl);
     }
+
 
     public async Task<Response<string>> DeleteProfileImageAsync(string userId)
     {
@@ -132,10 +140,14 @@ public class ProfileService(
 
         var user = await userManager.FindByIdAsync(userId);
         if (user == null)
-        {
-            logger.LogWarning("User with id={UserId} not found", userId);
             return new Response<string>(HttpStatusCode.NotFound, "User not found");
-        }
+
+        if (string.IsNullOrWhiteSpace(user.ImageUrl))
+            return new Response<string>(HttpStatusCode.BadRequest, "No profile image to delete");
+
+        var deleted = await fileService.DeleteFileAsync(user.ImageUrl);
+        if (!deleted)
+            return new Response<string>(HttpStatusCode.BadRequest, "Failed to delete image file");
 
         user.ImageUrl = null;
 
@@ -148,5 +160,6 @@ public class ProfileService(
 
         return Response<string>.Success("Profile image deleted successfully");
     }
+
 
 }

@@ -38,6 +38,8 @@ public static class SwaggerConfiguration
             {
                 { jwtSecurityScheme, Array.Empty<string>() }
             });
+            c.OperationFilter<SwaggerFileOperationFilter>();
         });
+
     }
 }

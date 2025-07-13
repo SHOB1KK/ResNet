@@ -9,6 +9,8 @@ public class Response<T>
     public int StatusCode { get; set; }
     public string? Message { get; set; }
 
+    public Response() { }  // пустой конструктор для сериализации
+
     public Response(T? data)
     {
         Data = data;
@@ -27,11 +29,23 @@ public class Response<T>
 
     public static Response<T> Success(T data)
     {
-        return new Response<T>(data)
+        return new Response<T>
         {
+            Data = data,
             IsSuccess = true,
             StatusCode = (int)HttpStatusCode.OK,
             Message = null
+        };
+    }
+    
+    public static Response<T> Success(T data, string message)
+    {
+        return new Response<T>
+        {
+            Data = data,
+            Message = message,
+            IsSuccess = true,
+            StatusCode = (int)HttpStatusCode.OK
         };
     }
 }

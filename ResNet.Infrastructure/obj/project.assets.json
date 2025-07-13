@@ -792,7 +792,10 @@
         },
         "runtime": {
           "bin/placeholder/ResNet.Doman.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },

@@ -21,6 +21,7 @@ public class BookingController(IBookingService bookingService)
     }
 
     [HttpGet("{id:int}")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<Response<GetBookingDto>> GetBookingById(int id)
     {
         return await bookingService.GetBookingByIdAsync(id);
@@ -33,15 +34,27 @@ public class BookingController(IBookingService bookingService)
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = Roles.Admin)]
     public async Task<Response<GetBookingDto>> UpdateBooking(int id, UpdateBookingDto bookingDto)
     {
         return await bookingService.UpdateBookingAsync(id, bookingDto);
     }
 
-    [HttpPost("{id:int}/cancel")]
-    public async Task<Response<string>> CancelBooking(int id)
+    [HttpPut("update-by-code")]
+    public async Task<Response<GetBookingDto>> UpdateBookingByCode(
+    [FromQuery] string bookingCode,
+    [FromQuery] string phoneNumber,
+    [FromBody] UpdateBookingDto bookingDto)
     {
-        return await bookingService.CancelBookingAsync(id);
+        return await bookingService.UpdateBookingByCodeAsync(bookingCode, phoneNumber, bookingDto);
+    }
+
+    [HttpPost("cancel-by-code")]
+    public async Task<Response<string>> CancelBookingByCode(
+        [FromQuery] string bookingCode,
+        [FromQuery] string phoneNumber)
+    {
+        return await bookingService.CancelBookingByCodeAsync(bookingCode, phoneNumber);
     }
 
     [HttpDelete("{id:int}")]

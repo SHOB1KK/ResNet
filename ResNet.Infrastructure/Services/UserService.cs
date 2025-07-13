@@ -3,6 +3,7 @@ using AutoMapper;
 using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,7 @@ public class UserService(
     UserManager<ApplicationUser> userManager,
     DataContext context,
     IMapper mapper,
+    IFileService fileService,
     ILogger<UserService> logger
 ) : IUserService
 {
@@ -205,19 +207,54 @@ public class UserService(
     }
 
 
-    public async Task<Response<string>> UpdateUserPhotoAsync(string userId, string? newPhotoUrl)
+    public async Task<Response<string>> UploadUserImageAsync(string userId, IFormFile file)
     {
         var user = await userManager.FindByIdAsync(userId);
         if (user == null)
             return new Response<string>(HttpStatusCode.NotFound, "User not found");
 
-        user.ImageUrl = newPhotoUrl ?? "";
+        if (file == null || file.Length == 0)
+            return new Response<string>(HttpStatusCode.BadRequest, "No file provided");
 
-        var result = await userManager.UpdateAsync(user);
-        if (!result.Succeeded)
+        // Если есть старая фотка — удаляем её
+        if (!string.IsNullOrEmpty(user.ImageUrl))
+        {
+            await fileService.DeleteFileAsync(user.ImageUrl);
+        }
+
+        // Загружаем новую фотку
+        var imageUrl = await fileService.UploadFileAsync(file, "user-images");
+
+        user.ImageUrl = imageUrl;
+
+        var updateResult = await userManager.UpdateAsync(user);
+        if (!updateResult.Succeeded)
             return new Response<string>(HttpStatusCode.BadRequest, "Failed to update user photo");
 
-        return new Response<string>("User photo updated successfully");
+        return new Response<string>(imageUrl);
+    }
+
+    // Удаление изображения пользователя
+    public async Task<Response<string>> DeleteUserImageAsync(string userId)
+    {
+        var user = await userManager.FindByIdAsync(userId);
+        if (user == null)
+            return new Response<string>(HttpStatusCode.NotFound, "User not found");
+
+        if (string.IsNullOrEmpty(user.ImageUrl))
+            return new Response<string>(HttpStatusCode.BadRequest, "User has no image to delete");
+
+        var deleted = await fileService.DeleteFileAsync(user.ImageUrl);
+        if (!deleted)
+            return new Response<string>(HttpStatusCode.BadRequest, "Failed to delete image file");
+
+        user.ImageUrl = null;
+
+        var updateResult = await userManager.UpdateAsync(user);
+        if (!updateResult.Succeeded)
+            return new Response<string>(HttpStatusCode.BadRequest, "Failed to update user after deleting photo");
+
+        return new Response<string>("User image deleted successfully");
     }
 
     public async Task<Response<bool>> IsUsernameTakenAsync(string username)

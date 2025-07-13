@@ -19,7 +19,8 @@ public class InfrastructureProfile : Profile
         CreateMap<UpdateCategoryDto, Category>();
 
         // Product
-        CreateMap<Product, GetProductDto>();
+        CreateMap<Product, GetProductDto>()
+    .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
         CreateMap<CreateProductDto, Product>();
         CreateMap<UpdateProductDto, Product>();
 
@@ -49,9 +50,13 @@ public class InfrastructureProfile : Profile
         CreateMap<UpdateBookingDto, Booking>();
 
         // Restaurant
-        CreateMap<Restaurant, GetRestaurantDto>();
+        CreateMap<Restaurant, GetRestaurantDto>()
+            .ForMember(dest => dest.Categories, opt => opt.MapFrom(
+                src => src.RestaurantCategories.Select(rc => rc.Category)
+            ));
         CreateMap<CreateRestaurantDto, Restaurant>();
         CreateMap<UpdateRestaurantDto, Restaurant>();
+
 
         // JobApplication
         CreateMap<JobApplication, GetJobApplicationDto>();

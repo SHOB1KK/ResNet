@@ -45,4 +45,23 @@ public class CategoryController(ICategoryService categoryService)
     {
         return await categoryService.DeleteCategoryAsync(id);
     }
+
+    [HttpPost("{id:int}/photo")]
+    [Authorize(Roles = Roles.Admin)]
+    [RequestSizeLimit(10_000_000)]
+    [Consumes("multipart/form-data")]
+    public async Task<Response<string>> UploadCategoryPhoto([FromRoute] int id, [FromForm] UploadImageDto dto)
+    {
+        if (dto?.Image == null || dto.Image.Length == 0)
+            return new Response<string>(System.Net.HttpStatusCode.BadRequest, "File is required");
+
+        return await categoryService.UploadCategoryImageAsync(id, dto.Image);
+    }
+
+    [HttpDelete("{id:int}/photo")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<Response<string>> DeleteCategoryPhoto([FromRoute] int id)
+    {
+        return await categoryService.DeleteCategoryImageAsync(id);
+    }
 }

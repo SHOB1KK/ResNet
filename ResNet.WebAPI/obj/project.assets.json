@@ -1837,7 +1837,10 @@
         },
         "runtime": {
           "bin/placeholder/ResNet.Doman.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "ResNet.Infrastructure/1.0.0": {
         "type": "project",
@@ -5076,11 +5079,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\user\\Desktop\\ResNet\\ResNet.WebAPI\\ResNet.WebAPI.csproj",
+      "projectUniqueName": "C:\\Users\\user\\Desktop\\ResNet\\resnet.webapi\\ResNet.WebAPI.csproj",
       "projectName": "ResNet.WebAPI",
-      "projectPath": "C:\\Users\\user\\Desktop\\ResNet\\ResNet.WebAPI\\ResNet.WebAPI.csproj",
+      "projectPath": "C:\\Users\\user\\Desktop\\ResNet\\resnet.webapi\\ResNet.WebAPI.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\user\\Desktop\\ResNet\\ResNet.WebAPI\\obj\\",
+      "outputPath": "C:\\Users\\user\\Desktop\\ResNet\\resnet.webapi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -5187,7 +5190,7 @@
       "code": "NU1603",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "ResNet.WebAPI depends on Hangfire.MemoryStorage (>= 1.7.1) but Hangfire.MemoryStorage 1.7.1 was not found. Hangfire.MemoryStorage 1.8.0 was resolved instead.",
+      "message": "ResNet.WebAPI зависит от Hangfire.MemoryStorage (>= 1.7.1), но версия Hangfire.MemoryStorage 1.7.1 не найдена. Использовалась версия Hangfire.MemoryStorage 1.8.0.",
       "libraryId": "Hangfire.MemoryStorage",
       "targetGraphs": [
         "net9.0"

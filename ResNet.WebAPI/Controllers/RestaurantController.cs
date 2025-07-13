@@ -48,8 +48,34 @@ public class RestaurantController(IRestaurantService restaurantService)
         return await restaurantService.DeleteRestaurantAsync(id);
     }
 
-    [HttpGet("{id:int}/menu")]
-    public async Task<Response<List<GetProductDto>>> GetMenu(int id)
+    [HttpPost("{id:int}/photo")]
+    [Authorize(Roles = Roles.Admin)]
+    [RequestSizeLimit(10_000_000)]
+    [Consumes("multipart/form-data")]
+    public async Task<Response<string>> UploadRestaurantPhoto([FromRoute] int id, [FromForm] UploadImageDto dto)
+    {
+        if (dto?.Image == null || dto.Image.Length == 0)
+            return new Response<string>(System.Net.HttpStatusCode.BadRequest, "File is required");
+
+        return await restaurantService.UploadRestaurantImageAsync(id, dto.Image);
+    }
+
+    [HttpDelete("{id}/photo")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<Response<string>> DeleteRestaurantPhoto([FromRoute] int id)
+    {
+        return await restaurantService.DeleteRestaurantImageAsync(id);
+    }
+
+    [HttpPost("{id}/add-category/{categoryId}")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<Response<string>> AddCategoryToRestaurant(int id, int categoryId)
+    {
+        return await restaurantService.AddCategoryToRestaurantAsync(id, categoryId);
+    }
+
+    [HttpGet("{id}/menu")]
+    public async Task<Response<GetMenuDto>> GetMenu(int id)
     {
         return await restaurantService.GetMenuByRestaurantIdAsync(id);
     }

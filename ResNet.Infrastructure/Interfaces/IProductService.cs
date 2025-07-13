@@ -1,4 +1,5 @@
 using Domain.Responses;
+using Microsoft.AspNetCore.Http;
 using ResNet.Domain.Dtos;
 using ResNet.Domain.Filters;
 
@@ -11,6 +12,8 @@ public interface IProductService
     Task<Response<GetProductDto>> AddProductAsync(CreateProductDto productDto);
     Task<Response<GetProductDto>> UpdateProductAsync(int id, UpdateProductDto productDto);
     Task<Response<string>> DeleteProductAsync(int id);
+    Task<Response<string>> UploadProductImageAsync(int productId, IFormFile file);
+    Task<Response<string>> DeleteProductImageAsync(int productId);
     // Task<Response<GetProductDto>> GetProductByBarcodeAsync(string barcode);
     // Task<Response<bool>> IsBarcodeTakenAsync(string barcode);
 }

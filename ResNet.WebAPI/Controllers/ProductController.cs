@@ -45,4 +45,23 @@ public class ProductController(IProductService productService)
     {
         return await productService.DeleteProductAsync(id);
     }
+
+    [HttpPost("{id:int}/photo")]
+    [Authorize(Roles = Roles.Admin)]
+    [RequestSizeLimit(10_000_000)]
+    [Consumes("multipart/form-data")]
+    public async Task<Response<string>> UploadProductPhoto([FromRoute] int id, [FromForm] UploadImageDto dto)
+    {
+        if (dto?.Image == null || dto.Image.Length == 0)
+            return new Response<string>(System.Net.HttpStatusCode.BadRequest, "File is required");
+
+        return await productService.UploadProductImageAsync(id, dto.Image);
+    }
+
+    [HttpDelete("{id:int}/photo")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<Response<string>> DeleteProductPhoto([FromRoute] int id)
+    {
+        return await productService.DeleteProductImageAsync(id);
+    }
 }

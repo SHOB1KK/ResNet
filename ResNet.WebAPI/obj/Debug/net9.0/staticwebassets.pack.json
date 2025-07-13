@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\user\\Desktop\\ResNet\\resnet.webapi\\wwwroot\\restaurants\\decb3370-c179-46d8-877c-1bb3df90a33c_salle.jpg",
+      "PackagePath": "staticwebassets\\restaurants\\decb3370-c179-46d8-877c-1bb3df90a33c_salle.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.ResNet.WebAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.ResNet.WebAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.ResNet.WebAPI.props",
+      "PackagePath": "build\\ResNet.WebAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.ResNet.WebAPI.props",
+      "PackagePath": "buildMultiTargeting\\ResNet.WebAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildTransitive.ResNet.WebAPI.props",
+      "PackagePath": "buildTransitive\\ResNet.WebAPI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

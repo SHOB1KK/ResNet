@@ -29,15 +29,20 @@ public class ProfileController(IProfileService profileService) : ControllerBase
         return await profileService.UpdateMyProfileAsync(userId, dto);
     }
 
-    [HttpPut("me/image")]
-    public async Task<Response<string>> UpdateProfileImage([FromBody] string imageUrl)
+    [HttpPost("me/photo")]
+    [RequestSizeLimit(10_000_000)]
+    [Consumes("multipart/form-data")]
+    public async Task<Response<string>> UploadRestaurantPhoto([FromForm] UploadImageDto dto)
     {
+        if (dto?.Image == null || dto.Image.Length == 0)
+            return new Response<string>(System.Net.HttpStatusCode.BadRequest, "File is required");
+
         var userId = GetUserId();
-        return await profileService.UpdateProfileImageAsync(userId, imageUrl);
+        return await profileService.UploadProfileImageAsync(userId, dto.Image);
     }
 
-    [HttpDelete("me/image")]
-    public async Task<Response<string>> DeleteProfileImage()
+    [HttpDelete("me/photo")]
+    public async Task<Response<string>> DeleteProfilePhoto()
     {
         var userId = GetUserId();
         return await profileService.DeleteProfileImageAsync(userId);

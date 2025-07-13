@@ -201,3 +201,5 @@ C:\Users\user\Desktop\ResNet\resnet.webapi\obj\Debug\net9.0\refint\ResNet.WebAPI
 C:\Users\user\Desktop\ResNet\resnet.webapi\obj\Debug\net9.0\ResNet.WebAPI.pdb
 C:\Users\user\Desktop\ResNet\ResNet.WebAPI\obj\Debug\net9.0\ResNet.WebAPI.genruntimeconfig.cache
 C:\Users\user\Desktop\ResNet\ResNet.WebAPI\obj\Debug\net9.0\ref\ResNet.WebAPI.dll
+C:\Users\user\Desktop\ResNet\ResNet.WebApi\obj\Debug\net9.0\ResNet.WebAPI.sourcelink.json
+C:\Users\user\Desktop\ResNet\ResNet.WebApi\bin\Debug\net9.0\ResNet.WebAPI.staticwebassets.runtime.json

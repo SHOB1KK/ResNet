@@ -22,5 +22,8 @@ namespace ResNet.Domain.Dtos
 
         [Required]
         public int CategoryId { get; set; }
+
+        [Required]
+        public int RestaurantId { get; set; }
     }
 }

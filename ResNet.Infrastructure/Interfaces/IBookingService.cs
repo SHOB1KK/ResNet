@@ -8,8 +8,9 @@ public interface IBookingService
 {
     Task<Response<GetBookingDto>> CreateBookingAsync(CreateBookingDto dto);
     Task<Response<GetBookingDto>> UpdateBookingAsync(int id, UpdateBookingDto dto);
+    Task<Response<GetBookingDto>> UpdateBookingByCodeAsync(string bookingCode, string phoneNumber, UpdateBookingDto dto);
     Task<Response<string>> DeleteBookingAsync(int id);
-    Task<Response<string>> CancelBookingAsync(int id);
+    Task<Response<string>> CancelBookingByCodeAsync(string bookingCode, string phoneNumber);
     Task<Response<GetBookingDto>> GetBookingByIdAsync(int id);
     Task<PagedResponse<List<GetBookingDto>>> GetBookingsAsync(BookingFilter filter);
 }

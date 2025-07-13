@@ -43,9 +43,6 @@ public class OrderService(
 
         IQueryable<Order> query = context.Orders.AsNoTracking();
 
-        if (!string.IsNullOrWhiteSpace(filter.UserId))
-            query = query.Where(o => o.UserId == filter.UserId);
-
         if (!string.IsNullOrWhiteSpace(filter.FullName))
             query = query.Where(o => o.FullName != null && o.FullName.ToLower().Contains(filter.FullName.ToLower()));
 
@@ -85,7 +82,59 @@ public class OrderService(
 
     public async Task<Response<GetOrderDto>> CreateOrderAsync(CreateOrderDto orderDto)
     {
-        logger.LogInformation("CreateOrderAsync called");
+        logger.LogInformation("CreateOrderAsync called with Type={OrderType}", orderDto.Type);
+
+        if (string.IsNullOrWhiteSpace(orderDto.FullName) || string.IsNullOrWhiteSpace(orderDto.PhoneNumber))
+        {
+            return new Response<GetOrderDto>(
+                HttpStatusCode.BadRequest,
+                "FullName and PhoneNumber are required for all orders."
+            );
+        }
+
+        switch (orderDto.Type)
+        {
+            case Domain.Constants.OrderType.Pickup:
+                break;
+
+            case Domain.Constants.OrderType.Delivery:
+                if (string.IsNullOrWhiteSpace(orderDto.DeliveryAddress))
+                {
+                    return new Response<GetOrderDto>(
+                        HttpStatusCode.BadRequest,
+                        "DeliveryAddress is required for Delivery orders."
+                    );
+                }
+                break;
+
+            case Domain.Constants.OrderType.AtTable:
+                if (orderDto.TableId == null)
+                {
+                    return new Response<GetOrderDto>(
+                        HttpStatusCode.BadRequest,
+                        "TableId is required for AtTable orders."
+                    );
+                }
+
+                var tableExists = await context.Tables
+                    .AsNoTracking()
+                    .AnyAsync(t => t.Id == orderDto.TableId);
+
+                if (!tableExists)
+                {
+                    return new Response<GetOrderDto>(
+                        HttpStatusCode.BadRequest,
+                        $"Table with id={orderDto.TableId} not found."
+                    );
+                }
+                break;
+
+            default:
+                return new Response<GetOrderDto>(
+                    HttpStatusCode.BadRequest,
+                    "Invalid OrderType. Allowed values: Pickup, Delivery, AtTable."
+                );
+        }
 
         var order = mapper.Map<Order>(orderDto);
         order.Status = OrderStatus.Pending;
@@ -95,12 +144,13 @@ public class OrderService(
         var result = await context.SaveChangesAsync();
 
         if (result == 0)
-            return new Response<GetOrderDto>(HttpStatusCode.BadRequest, "Order not created");
+        {
+            return new Response<GetOrderDto>(HttpStatusCode.BadRequest, "Order not created.");
+        }
 
         var dto = mapper.Map<GetOrderDto>(order);
         return Response<GetOrderDto>.Success(dto);
     }
-
 
     public async Task<Response<GetOrderDto>> CancelOrderAsync(int id)
     {
@@ -127,7 +177,7 @@ public class OrderService(
         var dto = mapper.Map<GetOrderDto>(order);
         return Response<GetOrderDto>.Success(dto);
     }
-    
+
     public async Task<Response<GetOrderDto>> UpdateOrderAsync(int id, UpdateOrderDto orderDto)
     {
         logger.LogInformation("UpdateOrderAsync called with id={Id}", id);

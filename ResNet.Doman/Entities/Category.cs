@@ -14,13 +14,11 @@ namespace ResNet.Domain.Entities
         [MaxLength(500)]
         public string? Description { get; set; }
 
-        [Required]
-        public int RestaurantId { get; set; }
-        public Restaurant Restaurant { get; set; } = null!;
-
         [MaxLength(300)]
         public string? ImageUrl { get; set; }
 
         public List<Product> Products { get; set; } = new();
+
+        public List<RestaurantCategory> RestaurantCategories { get; set; } = new List<RestaurantCategory>();
     }
 }

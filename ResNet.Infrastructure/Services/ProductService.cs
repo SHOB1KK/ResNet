@@ -3,6 +3,7 @@ using AutoMapper;
 using Domain.Responses;
 using Infrastructure.Data;
 using Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ResNet.Domain.Dtos;
@@ -14,14 +15,17 @@ namespace Infrastructure.Services;
 public class ProductService(
     DataContext context,
     IMapper mapper,
+    IFileService fileService,
     ILogger<ProductService> logger
 ) : IProductService
 {
     public async Task<PagedResponse<List<GetProductDto>>> GetAllProductsAsync(ProductFilter filter)
     {
-        logger.LogInformation("GetAllProductsAsync called");
+        logger.LogInformation("GetAllProductsAsync called with filter {@Filter}", filter);
 
-        IQueryable<Product> query = context.Products.AsNoTracking();
+        IQueryable<Product> query = context.Products
+            .AsNoTracking()
+            .Include(p => p.Category);
 
         if (!string.IsNullOrWhiteSpace(filter.Name))
             query = query.Where(p => p.Name.ToLower().Contains(filter.Name.ToLower()));
@@ -35,11 +39,15 @@ public class ProductService(
         if (filter.PriceTo != null)
             query = query.Where(p => p.Price <= filter.PriceTo);
 
+        if (filter.RestaurantId != null)
+            query = query.Where(p => p.RestaurantId == filter.RestaurantId);
+
         int totalCount = await query.CountAsync();
 
         var validFilter = new ValidFilter(filter.PageNumber, filter.PageSize);
 
         var products = await query
+            .OrderBy(p => p.Name)
             .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
             .Take(validFilter.PageSize)
             .ToListAsync();
@@ -48,6 +56,7 @@ public class ProductService(
 
         return new PagedResponse<List<GetProductDto>>(dtos, validFilter.PageNumber, validFilter.PageSize, totalCount);
     }
+
 
     public async Task<Response<GetProductDto>> GetProductByIdAsync(int id)
     {
@@ -68,6 +77,12 @@ public class ProductService(
     public async Task<Response<GetProductDto>> AddProductAsync(CreateProductDto productDto)
     {
         logger.LogInformation("AddProductAsync called");
+
+        var categoryExists = await context.RestaurantCategories
+            .AnyAsync(rc => rc.RestaurantId == productDto.RestaurantId && rc.CategoryId == productDto.CategoryId);
+
+        if (!categoryExists)
+            return new Response<GetProductDto>(HttpStatusCode.BadRequest, "Category is not assigned to this restaurant");
 
         var product = mapper.Map<Product>(productDto);
 
@@ -97,6 +112,7 @@ public class ProductService(
         existingProduct.Description = productDto.Description;
         existingProduct.ImageUrl = productDto.ImageUrl;
         existingProduct.Quantity = productDto.Quantity;
+        existingProduct.RestaurantId = productDto.RestaurantId;
         existingProduct.CategoryId = productDto.CategoryId;
 
         var result = await context.SaveChangesAsync();
@@ -127,4 +143,54 @@ public class ProductService(
 
         return Response<string>.Success("Product deleted successfully");
     }
+
+    public async Task<Response<string>> UploadProductImageAsync(int productId, IFormFile file)
+    {
+        logger.LogInformation("UploadProductImageAsync called with productId={Id}", productId);
+
+        var product = await context.Products.FirstOrDefaultAsync(p => p.Id == productId);
+        if (product == null)
+            return new Response<string>(HttpStatusCode.NotFound, "Product not found");
+
+        if (file == null || file.Length == 0)
+            return new Response<string>(HttpStatusCode.BadRequest, "File is empty");
+
+        var imageUrl = await fileService.UploadFileAsync(file, "products");
+
+        if (!string.IsNullOrWhiteSpace(product.ImageUrl))
+            await fileService.DeleteFileAsync(product.ImageUrl);
+
+        product.ImageUrl = imageUrl;
+
+        var result = await context.SaveChangesAsync();
+        if (result == 0)
+            return new Response<string>(HttpStatusCode.BadRequest, "Failed to update product image");
+
+        return Response<string>.Success(imageUrl);
+    }
+
+    public async Task<Response<string>> DeleteProductImageAsync(int productId)
+    {
+        logger.LogInformation("DeleteProductImageAsync called with productId={Id}", productId);
+
+        var product = await context.Products.FirstOrDefaultAsync(p => p.Id == productId);
+        if (product == null)
+            return new Response<string>(HttpStatusCode.NotFound, "Product not found");
+
+        if (string.IsNullOrWhiteSpace(product.ImageUrl))
+            return new Response<string>(HttpStatusCode.BadRequest, "No image to delete");
+
+        var deleted = await fileService.DeleteFileAsync(product.ImageUrl);
+        if (!deleted)
+            return new Response<string>(HttpStatusCode.BadRequest, "Failed to delete image file");
+
+        product.ImageUrl = null;
+
+        var result = await context.SaveChangesAsync();
+        if (result == 0)
+            return new Response<string>(HttpStatusCode.BadRequest, "Failed to update product after deleting image");
+
+        return Response<string>.Success("Product image deleted successfully");
+    }
+
 }

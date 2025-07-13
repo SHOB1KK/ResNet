@@ -1,7 +1,7 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\Desktop\\ResNet\\ResNet.WebAPI\\ResNet.WebAPI.csproj": {}
+    "C:\\Users\\user\\Desktop\\ResNet\\resnet.webapi\\ResNet.WebAPI.csproj": {}
   },
   "projects": {
     "C:\\Users\\user\\Desktop\\ResNet\\ResNet.Doman\\ResNet.Doman.csproj": {
@@ -61,6 +61,9 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
@@ -170,14 +173,14 @@
         }
       }
     },
-    "C:\\Users\\user\\Desktop\\ResNet\\ResNet.WebAPI\\ResNet.WebAPI.csproj": {
+    "C:\\Users\\user\\Desktop\\ResNet\\resnet.webapi\\ResNet.WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\Desktop\\ResNet\\ResNet.WebAPI\\ResNet.WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\ResNet\\resnet.webapi\\ResNet.WebAPI.csproj",
         "projectName": "ResNet.WebAPI",
-        "projectPath": "C:\\Users\\user\\Desktop\\ResNet\\ResNet.WebAPI\\ResNet.WebAPI.csproj",
+        "projectPath": "C:\\Users\\user\\Desktop\\ResNet\\resnet.webapi\\ResNet.WebAPI.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\Desktop\\ResNet\\ResNet.WebAPI\\obj\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\ResNet\\resnet.webapi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"

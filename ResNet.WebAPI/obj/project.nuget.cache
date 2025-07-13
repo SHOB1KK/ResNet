@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QltnaxQ/LUI=",
+  "dgSpecHash": "C1hCqI683yM=",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\Desktop\\ResNet\\ResNet.WebAPI\\ResNet.WebAPI.csproj",
+  "projectFilePath": "C:\\Users\\user\\Desktop\\ResNet\\resnet.webapi\\ResNet.WebAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
@@ -99,7 +99,7 @@
       "code": "NU1603",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "ResNet.WebAPI depends on Hangfire.MemoryStorage (>= 1.7.1) but Hangfire.MemoryStorage 1.7.1 was not found. Hangfire.MemoryStorage 1.8.0 was resolved instead.",
+      "message": "ResNet.WebAPI зависит от Hangfire.MemoryStorage (>= 1.7.1), но версия Hangfire.MemoryStorage 1.7.1 не найдена. Использовалась версия Hangfire.MemoryStorage 1.8.0.",
       "libraryId": "Hangfire.MemoryStorage",
       "targetGraphs": [
         "net9.0"
