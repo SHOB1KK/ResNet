@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace ResNet.Domain.Entities
 {
@@ -14,6 +14,9 @@ namespace ResNet.Domain.Entities
         public string? ImageUrl { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public int? RestaurantId { get; set; }
+        public Restaurant? Restaurant { get; set; }
 
         public bool IsActive { get; set; } = true;
 

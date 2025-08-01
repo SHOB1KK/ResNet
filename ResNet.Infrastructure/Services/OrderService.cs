@@ -92,6 +92,20 @@ public class OrderService(
             );
         }
 
+        if (orderDto.RestaurantId <= 0)
+        {
+            return new Response<GetOrderDto>(
+                HttpStatusCode.BadRequest,
+                "RestaurantId is required and must be valid."
+            );
+        }
+
+        var restaurant = await context.Restaurants.FirstOrDefaultAsync(r => r.Id == orderDto.RestaurantId);
+        if (restaurant == null)
+        {
+            return new Response<GetOrderDto>(HttpStatusCode.BadRequest, $"Restaurant with ID {orderDto.RestaurantId} not found.");
+        }
+
         switch (orderDto.Type)
         {
             case Domain.Constants.OrderType.Pickup:
@@ -136,20 +150,61 @@ public class OrderService(
                 );
         }
 
-        var order = mapper.Map<Order>(orderDto);
-        order.Status = OrderStatus.Pending;
-        order.CreatedAt = DateTime.UtcNow;
+        using var transaction = await context.Database.BeginTransactionAsync();
 
-        await context.Orders.AddAsync(order);
-        var result = await context.SaveChangesAsync();
-
-        if (result == 0)
+        try
         {
-            return new Response<GetOrderDto>(HttpStatusCode.BadRequest, "Order not created.");
-        }
+            var order = mapper.Map<Order>(orderDto);
+            order.Status = OrderStatus.Pending;
+            order.CreatedAt = DateTime.UtcNow;
+            order.RestaurantId = orderDto.RestaurantId;
 
-        var dto = mapper.Map<GetOrderDto>(order);
-        return Response<GetOrderDto>.Success(dto);
+            order.OrderItems = new List<OrderItem>();
+            decimal totalAmount = 0;
+
+            foreach (var itemDto in orderDto.Items)
+            {
+                var product = await context.Products.FirstOrDefaultAsync(p => p.Id == itemDto.ProductId && p.RestaurantId == orderDto.RestaurantId);
+
+                if (product == null)
+                {
+                    return new Response<GetOrderDto>(HttpStatusCode.BadRequest, $"Product with ID {itemDto.ProductId} not found in this restaurant.");
+                }
+
+                if (product.Quantity < itemDto.Quantity)
+                {
+                    return new Response<GetOrderDto>(HttpStatusCode.BadRequest, $"Not enough quantity for product {product.Name}.");
+                }
+
+                product.Quantity -= itemDto.Quantity;
+
+                var orderItem = new OrderItem
+                {
+                    ProductId = product.Id,
+                    Quantity = itemDto.Quantity,
+                    PriceAtMoment = product.Price
+                };
+
+                order.OrderItems.Add(orderItem);
+                totalAmount += product.Price * itemDto.Quantity;
+            }
+
+            order.TotalAmount = totalAmount;
+
+            await context.Orders.AddAsync(order);
+            await context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            var dto = mapper.Map<GetOrderDto>(order);
+            return Response<GetOrderDto>.Success(dto);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to create order");
+            await transaction.RollbackAsync();
+            return new Response<GetOrderDto>(HttpStatusCode.InternalServerError, "Failed to create order");
+        }
     }
 
     public async Task<Response<GetOrderDto>> CancelOrderAsync(int id)
@@ -182,7 +237,10 @@ public class OrderService(
     {
         logger.LogInformation("UpdateOrderAsync called with id={Id}", id);
 
-        var order = await context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+        var order = await context.Orders
+            .Include(o => o.OrderItems)
+            .FirstOrDefaultAsync(o => o.Id == id);
+
         if (order == null)
         {
             logger.LogWarning("Order with id={Id} not found", id);
@@ -192,7 +250,8 @@ public class OrderService(
         order.FullName = orderDto.FullName ?? order.FullName;
         order.PhoneNumber = orderDto.PhoneNumber ?? order.PhoneNumber;
         order.Status = orderDto.Status ?? order.Status;
-        order.TotalAmount = orderDto.TotalAmount ?? order.TotalAmount;
+
+        order.TotalAmount = order.OrderItems.Sum(i => i.PriceAtMoment * i.Quantity);
 
         var result = await context.SaveChangesAsync();
 

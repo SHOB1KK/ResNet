@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ResNet.WebAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+20bde1723375c67dd2a04771a643456b984d03f9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+553eaa9e217a89ba8b0cba9ccc4de593e5cbf6c9")]
 [assembly: System.Reflection.AssemblyProductAttribute("ResNet.WebAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ResNet.WebAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

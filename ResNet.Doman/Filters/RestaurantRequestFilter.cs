@@ -9,7 +9,7 @@ public class RequestFilter
     public string? OwnerEmail { get; set; }
     public string? OwnerPhone { get; set; }
     public string? Status { get; set; }
-
+    public string? WorkingDayOfWeek { get; set; }
     public int PageNumber { get; set; }
     public int PageSize { get; set; }
 }

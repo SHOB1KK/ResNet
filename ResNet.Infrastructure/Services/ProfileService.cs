@@ -39,7 +39,8 @@ public class ProfileService(
             ImageUrl = user.ImageUrl ?? "",
             PhoneNumber = user.PhoneNumber ?? "",
             Role = roles.FirstOrDefault() ?? "",
-            CreatedAt = user.LockoutEnd?.DateTime ?? DateTime.UtcNow
+            CreatedAt = user.LockoutEnd?.DateTime ?? DateTime.UtcNow,
+            RestaurantName = user.Restaurant?.Name
         };
 
         return Response<GetUserDto>.Success(dto);

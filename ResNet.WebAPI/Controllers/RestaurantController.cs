@@ -13,7 +13,7 @@ namespace WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RestaurantController(IRestaurantService restaurantService)
+public class RestaurantController(IRestaurantService restaurantService) : ControllerBase
 {
     [HttpGet]
     public async Task<PagedResponse<List<GetRestaurantDto>>> GetAll([FromQuery] RestaurantFilter filter)
@@ -35,11 +35,26 @@ public class RestaurantController(IRestaurantService restaurantService)
     }
 
     [HttpPut("{id:int}")]
-    [Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Admin + "," + Roles.Owner)]
     public async Task<Response<GetRestaurantDto>> Update(int id, UpdateRestaurantDto dto)
     {
-        return await restaurantService.UpdateRestaurantAsync(id, dto);
+        var restaurantIdClaim = User.FindFirst("restaurant_id")?.Value;
+
+        if (string.IsNullOrEmpty(restaurantIdClaim))
+        {
+            return new Response<GetRestaurantDto>(System.Net.HttpStatusCode.Forbidden, "Access denied");
+        }
+
+        var userRestaurantId = int.Parse(restaurantIdClaim);
+
+        if (User.IsInRole(Roles.Admin) || userRestaurantId == id)
+        {
+            return await restaurantService.UpdateRestaurantAsync(id, dto);
+        }
+
+        return new Response<GetRestaurantDto>(System.Net.HttpStatusCode.Forbidden, "Access denied to this restaurant");
     }
+
 
     [HttpDelete("{id:int}")]
     [Authorize(Roles = Roles.Admin)]

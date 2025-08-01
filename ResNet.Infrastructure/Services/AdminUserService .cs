@@ -41,11 +41,12 @@ IEmailService emailSender
 
         var user = new ApplicationUser
         {
-            UserName = dto.Username,
-            Email = dto.Email,
-            FullName = dto.FullName,
-            PhoneNumber = dto.PhoneNumber,
-            EmailConfirmed = true
+          UserName = dto.Username,
+          Email = dto.Email,
+          FullName = dto.FullName,
+          PhoneNumber = dto.PhoneNumber,
+          EmailConfirmed = true,
+          RestaurantId = dto.RestaurantId
         };
 
         var result = await userManager.CreateAsync(user, dto.Password);
@@ -63,8 +64,8 @@ IEmailService emailSender
         {
             var email = new EmailDto
             {
-                To = user.Email,
                 Subject = "🧾 Добро пожаловать в KASSA POS — Ваша регистрация подтверждена!",
+                To = user.Email,
                 Body = $"""
     <html>
     <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color:#f4f6f8; margin:0; padding:0;">
@@ -122,14 +123,15 @@ IEmailService emailSender
 
         var userDto = new GetUserDto
         {
-            Id = user.Id,
-            Username = user.UserName,
-            FullName = user.FullName,
-            PhoneNumber = user.PhoneNumber,
-            ImageUrl = user.ImageUrl,
-            Email = user.Email,
-            Role = role,
-            CreatedAt = user.CreatedAt,
+          Id = user.Id,
+          Username = user.UserName,
+          FullName = user.FullName,
+          PhoneNumber = user.PhoneNumber,
+          ImageUrl = user.ImageUrl,
+          Email = user.Email,
+          Role = role,
+          CreatedAt = user.CreatedAt,
+            RestaurantName = user.Restaurant?.Name
         };
 
         logger.LogInformation("User {Username} created successfully with role {Role}", user.UserName, role);

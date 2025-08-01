@@ -203,3 +203,4 @@ C:\Users\user\Desktop\ResNet\ResNet.WebAPI\obj\Debug\net9.0\ResNet.WebAPI.genrun
 C:\Users\user\Desktop\ResNet\ResNet.WebAPI\obj\Debug\net9.0\ref\ResNet.WebAPI.dll
 C:\Users\user\Desktop\ResNet\ResNet.WebApi\obj\Debug\net9.0\ResNet.WebAPI.sourcelink.json
 C:\Users\user\Desktop\ResNet\ResNet.WebApi\bin\Debug\net9.0\ResNet.WebAPI.staticwebassets.runtime.json
+C:\Users\user\Desktop\ResNet\ResNet.WebAPI\bin\Debug\net9.0\Swashbuckle.AspNetCore.Annotations.dll

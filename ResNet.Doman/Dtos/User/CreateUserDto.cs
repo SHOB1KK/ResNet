@@ -22,8 +22,11 @@ namespace ResNet.Domain.Dtos
 
         [Required]
         public string Role { get; set; } = Roles.Cashier;
-        
+
         [Required, MinLength(6), MaxLength(100)]
         public string Password { get; set; } = null!;
+        
+        public int? RestaurantId { get; set; }
+
     }
 }

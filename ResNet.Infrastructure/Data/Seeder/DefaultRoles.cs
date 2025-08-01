@@ -12,6 +12,7 @@ public static class DefaultRoles
         {
             Roles.Admin,
             Roles.Cashier,
+            Roles.Owner,
         };
 
         foreach (var role in roles)

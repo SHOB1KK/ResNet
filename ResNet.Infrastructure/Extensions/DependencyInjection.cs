@@ -27,5 +27,6 @@ public static class DependencyInjection
         services.AddScoped<IRestaurantRequestService, RestaurantRequestService>();
         services.AddScoped<IJobApplicationService, JobApplicationService>();
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IStatisticService, StatisticService>();
     }
 }

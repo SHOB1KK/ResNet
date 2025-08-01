@@ -33,11 +33,11 @@ public class OrderItemController(IOrderItemService orderItemService)
         return await orderItemService.GetOrderItemByIdAsync(id);
     }
 
-    [HttpPost]
-    public async Task<Response<GetOrderItemDto>> Create(CreateOrderItemDto dto)
-    {
-        return await orderItemService.AddOrderItemAsync(dto);
-    }
+    // [HttpPost]
+    // public async Task<Response<GetOrderItemDto>> Create(CreateOrderItemDto dto)
+    // {
+    //     return await orderItemService.AddOrderItemAsync(dto);
+    // }
 
     [HttpPut("{id:int}")]
     public async Task<Response<GetOrderItemDto>> Update(int id, UpdateOrderItemDto dto)

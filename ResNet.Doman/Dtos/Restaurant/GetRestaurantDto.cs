@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ResNet.Domain.Entities;
 
 namespace ResNet.Domain.Dtos
 {
@@ -27,5 +28,7 @@ namespace ResNet.Domain.Dtos
         public List<GetProductDto>? Menu { get; set; }
 
         public List<GetTableDto>? Tables { get; set; }
+        public List<ApplicationUser>? Users { get; set; }
+
     }
 }

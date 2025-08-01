@@ -20,13 +20,14 @@ namespace ResNet.Domain.Entities
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public List<OrderItem> Items { get; set; } = new();
-
         public string Type { get; set; } = OrderType.Pickup;
 
         public string? FullName { get; set; }
         public string? PhoneNumber { get; set; }
         public string? DeliveryAddress { get; set; }
+
+        public int RestaurantId { get; set; }
+        public Restaurant Restaurant { get; set; }
 
         public int? TableId { get; set; }
         public Table? Table { get; set; }

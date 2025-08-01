@@ -15,8 +15,13 @@ namespace ResNet.Domain.Dtos
 
         [Required]
         public string PhoneNumber { get; set; }
-        
+
+        [Required]
         public int? TableId { get; set; }
+
+        [Required]
+        public int RestaurantId { get; set; }
+
 
         [Required]
         public string Type { get; set; } = OrderType.Pickup;

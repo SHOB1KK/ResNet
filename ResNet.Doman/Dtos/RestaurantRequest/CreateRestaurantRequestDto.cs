@@ -27,4 +27,7 @@ public class CreateRestaurantRequestDto
     [MaxLength(20)]
     [Phone]
     public string? OwnerPhone { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public List<WorkingHourDto> WorkingHours { get; set; } = new();
 }

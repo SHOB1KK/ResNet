@@ -42,7 +42,8 @@ public class UserService(
                 ImageUrl = u.ImageUrl ?? string.Empty,
                 PhoneNumber = u.PhoneNumber ?? string.Empty,
                 Role = roles.FirstOrDefault() ?? string.Empty,
-                CreatedAt = u.LockoutEnd?.DateTime ?? DateTime.UtcNow
+                CreatedAt = u.LockoutEnd?.DateTime ?? DateTime.UtcNow,
+                RestaurantName = u.Restaurant?.Name
             });
         }
 
@@ -106,6 +107,8 @@ public class UserService(
         user.FullName = dto.FullName;
         user.Email = dto.Email;
         user.PhoneNumber = dto.PhoneNumber;
+        user.ImageUrl = dto.ImageUrl;
+        user.RestaurantId = dto.RestaurantId;
 
         var updateResult = await userManager.UpdateAsync(user);
         if (!updateResult.Succeeded)
@@ -127,7 +130,8 @@ public class UserService(
             ImageUrl = user.ImageUrl ?? "",
             PhoneNumber = user.PhoneNumber ?? "",
             Role = dto.Role,
-            CreatedAt = user.LockoutEnd?.DateTime ?? DateTime.UtcNow
+            CreatedAt = user.LockoutEnd?.DateTime ?? DateTime.UtcNow,
+            RestaurantName = user.Restaurant?.Name
         };
 
         return new Response<GetUserDto>(updated);

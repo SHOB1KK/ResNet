@@ -36,4 +36,6 @@ public class RestaurantRequest
     [MaxLength(20)]
     public string Status { get; set; } = RequestStatus.Pending;
 
+    public List<WorkingHour> WorkingHours { get; set; } = new();
+
 }

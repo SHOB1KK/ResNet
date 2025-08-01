@@ -6,17 +6,22 @@ using ResNet.Domain.Dtos;
 using ResNet.Domain.Filters;
 using Infrastructure.Interfaces;
 using ResNet.Domain.Constants;
+using System.Net;
 
 namespace WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BookingController(IBookingService bookingService)
+public class BookingController(IBookingService bookingService) : ControllerBase
 {
     [HttpGet]
-    [Authorize(Roles = Roles.Admin)]
-    public async Task<PagedResponse<List<GetBookingDto>>> GetBookings([FromQuery] BookingFilter filter)
+    [Authorize(Roles = Roles.Admin + "," + Roles.Owner + "," + Roles.Cashier)]
+    public async Task<PagedResponse<List<GetBookingDto>>> GetBookings(int restaurantId, [FromQuery] BookingFilter filter)
     {
+        if (!await HasAccessToRestaurant(restaurantId))
+            return new PagedResponse<List<GetBookingDto>>(HttpStatusCode.Forbidden, "Access denied");
+
+        filter.RestaurantId = restaurantId;
         return await bookingService.GetBookingsAsync(filter);
     }
 
@@ -61,5 +66,17 @@ public class BookingController(IBookingService bookingService)
     public async Task<Response<string>> DeleteBooking(int id)
     {
         return await bookingService.DeleteBookingAsync(id);
+    }
+
+        private async Task<bool> HasAccessToRestaurant(int restaurantId)
+    {
+        if (User.IsInRole(Roles.Admin))
+            return true;
+
+        var claim = User.FindFirst("restaurant_id")?.Value;
+        if (string.IsNullOrEmpty(claim))
+            return false;
+
+        return int.TryParse(claim, out var userRestaurantId) && userRestaurantId == restaurantId;
     }
 }

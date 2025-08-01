@@ -61,9 +61,28 @@ public class InfrastructureProfile : Profile
         // JobApplication
         CreateMap<JobApplication, GetJobApplicationDto>();
         CreateMap<CreateJobApplicationDto, JobApplication>();
+        // CreateMap<JobApplicationFormModel, CreateJobApplicationDto>();
 
         // RestaurantRequest
         CreateMap<RestaurantRequest, GetRestaurantRequestDto>();
-        CreateMap<CreateRestaurantRequestDto, RestaurantRequest>();
+
+        CreateMap<WorkingHourDto, WorkingHour>()
+            .ForMember(dest => dest.Day, opt => opt.MapFrom(src => Enum.Parse<DayOfWeek>(src.DayOfWeek)))
+            .ForMember(dest => dest.OpenTime, opt => opt.MapFrom(src => src.From))
+            .ForMember(dest => dest.CloseTime, opt => opt.MapFrom(src => src.To));
+
+        CreateMap<WorkingHour, WorkingHourDto>()
+            .ForMember(dest => dest.DayOfWeek, opt => opt.MapFrom(src => src.Day.ToString()))
+            .ForMember(dest => dest.From, opt => opt.MapFrom(src => src.OpenTime))
+            .ForMember(dest => dest.To, opt => opt.MapFrom(src => src.CloseTime))
+            .ForMember(dest => dest.IsEnabled, opt => opt.MapFrom(src => true));
+
+        CreateMap<CreateRestaurantRequestDto, RestaurantRequest>()
+            .ForMember(dest => dest.WorkingHours, opt => opt.MapFrom(src => src.WorkingHours.Where(w => w.IsEnabled).ToList()));
+
+        CreateMap<ApplicationUser, GetUserDto>()
+            .ForMember(dest => dest.RestaurantName,
+               opt => opt.MapFrom(src => src.Restaurant != null ? src.Restaurant.Name : null));
+
     }
 }

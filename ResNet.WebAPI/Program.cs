@@ -62,6 +62,7 @@ builder.Services.AddAutoMapper(typeof(InfrastructureProfile));
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen();
 
+
 // ✅ 5️⃣ CORS: Разрешаем ВСЕМ
 builder.Services.AddCors(options =>
 {
@@ -95,6 +96,8 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseRouting();
 

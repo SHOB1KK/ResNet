@@ -24,13 +24,27 @@ public class RestaurantRequestService(
     {
         logger.LogInformation("GetAllRequestsAsync called with filter {@Filter}", filter);
 
-        IQueryable<RestaurantRequest> query = context.RestaurantRequests.AsNoTracking();
+        IQueryable<RestaurantRequest> query = context.RestaurantRequests
+            .Include(r => r.WorkingHours) // чтобы подтянуть связанные рабочие часы
+            .AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(filter.Name))
             query = query.Where(r => r.Name.ToLower().Contains(filter.Name.ToLower()));
 
         if (!string.IsNullOrWhiteSpace(filter.Status))
             query = query.Where(r => r.Status == filter.Status);
+
+        if (filter.WorkingDayOfWeek != null)
+        {
+            if (Enum.TryParse<DayOfWeek>(filter.WorkingDayOfWeek, true, out var day))
+            {
+                query = query.Where(r => r.WorkingHours.Any(wh => wh.Day == day));
+            }
+            else
+            {
+                logger.LogWarning("Invalid WorkingDayOfWeek filter value: {Day}", filter.WorkingDayOfWeek);
+            }
+        }
 
         int totalCount = await query.CountAsync();
         var validFilter = new ValidFilter(filter.PageNumber, filter.PageSize);
@@ -45,11 +59,16 @@ public class RestaurantRequestService(
         return new PagedResponse<List<GetRestaurantRequestDto>>(dtos, validFilter.PageNumber, validFilter.PageSize, totalCount);
     }
 
+
     public async Task<Response<GetRestaurantRequestDto>> GetRequestByIdAsync(int id)
     {
         logger.LogInformation("GetRequestByIdAsync called with id={Id}", id);
 
-        var request = await context.RestaurantRequests.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
+        var request = await context.RestaurantRequests
+            .AsNoTracking()
+            .Include(r => r.WorkingHours)
+            .FirstOrDefaultAsync(r => r.Id == id);
+
         if (request == null)
         {
             logger.LogWarning("Request with id={Id} not found", id);

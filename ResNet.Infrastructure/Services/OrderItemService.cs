@@ -90,21 +90,21 @@ public class OrderItemService(
         return Response<GetOrderItemDto>.Success(dto);
     }
 
-    public async Task<Response<GetOrderItemDto>> AddOrderItemAsync(CreateOrderItemDto orderItemDto)
-    {
-        logger.LogInformation("AddOrderItemAsync called");
+    // public async Task<Response<GetOrderItemDto>> AddOrderItemAsync(CreateOrderItemDto orderItemDto)
+    // {
+    //     logger.LogInformation("AddOrderItemAsync called");
 
-        var orderItem = mapper.Map<OrderItem>(orderItemDto);
+    //     var orderItem = mapper.Map<OrderItem>(orderItemDto);
 
-        await context.OrderItems.AddAsync(orderItem);
-        var result = await context.SaveChangesAsync();
+    //     await context.OrderItems.AddAsync(orderItem);
+    //     var result = await context.SaveChangesAsync();
 
-        if (result == 0)
-            return new Response<GetOrderItemDto>(System.Net.HttpStatusCode.BadRequest, "Order item not created");
+    //     if (result == 0)
+    //         return new Response<GetOrderItemDto>(System.Net.HttpStatusCode.BadRequest, "Order item not created");
 
-        var dto = mapper.Map<GetOrderItemDto>(orderItem);
-        return Response<GetOrderItemDto>.Success(dto);
-    }
+    //     var dto = mapper.Map<GetOrderItemDto>(orderItem);
+    //     return Response<GetOrderItemDto>.Success(dto);
+    // }
 
     public async Task<Response<GetOrderItemDto>> UpdateOrderItemAsync(int id, UpdateOrderItemDto orderItemDto)
     {

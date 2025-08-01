@@ -64,7 +64,7 @@ public class DataContext : IdentityDbContext<ApplicationUser>
         // OrderItem - Order (многие к одному)
         modelBuilder.Entity<OrderItem>()
             .HasOne(oi => oi.Order)
-            .WithMany(o => o.Items)
+            .WithMany(o => o.OrderItems)
             .HasForeignKey(oi => oi.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
 
@@ -94,5 +94,18 @@ public class DataContext : IdentityDbContext<ApplicationUser>
             .WithMany()
             .HasForeignKey(o => o.TableId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<WorkingHour>()
+            .HasOne(wh => wh.RestaurantRequest)
+            .WithMany(rr => rr.WorkingHours)
+            .HasForeignKey(wh => wh.RestaurantRequestId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ApplicationUser>()
+            .HasOne(u => u.Restaurant)
+            .WithMany(r => r.Users)
+            .HasForeignKey(u => u.RestaurantId)
+            .OnDelete(DeleteBehavior.SetNull);
+
     }
 }

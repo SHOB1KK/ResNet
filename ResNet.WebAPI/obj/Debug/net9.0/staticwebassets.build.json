@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "MNmrt+9cESODCcGGuUtrRBiLo2YXCWmne9/6lHbTAT4=",
+  "Hash": "r/Hzpu1bF6oIQB0SoK3KlkzobeS4dms0p/MFUrwuLtA=",
   "Source": "ResNet.WebAPI",
   "BasePath": "_content/ResNet.WebAPI",
   "Mode": "Default",
@@ -10,7 +10,7 @@
     {
       "Name": "ResNet.WebAPI\\wwwroot",
       "Source": "ResNet.WebAPI",
-      "ContentRoot": "C:\\Users\\user\\Desktop\\ResNet\\resnet.WebApi\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\user\\Desktop\\ResNet\\ResNet.WebAPI\\wwwroot\\",
       "BasePath": "_content/ResNet.WebAPI",
       "Pattern": "**"
     }
