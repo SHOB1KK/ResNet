@@ -256,7 +256,6 @@ public class BookingService(
 
         return Response<string>.Success("Booking cancelled successfully");
     }
-
     public async Task<Response<string>> DeleteBookingAsync(int id)
     {
         logger.LogInformation("DeleteBookingAsync called with id={Id}", id);
