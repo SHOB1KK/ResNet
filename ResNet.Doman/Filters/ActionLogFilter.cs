@@ -4,7 +4,7 @@ public class ActionLogFilter
 
     public string? ActionType { get; set; }
 
-    public string? Entity { get; set; }
+    public string? Entity { get; set; } 
 
     public int? EntityId { get; set; }
 

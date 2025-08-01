@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ResNet.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class ProjectSucessfulChangedAndAdded : Migration
+    public partial class ProjectSucessfulChangedAndAdded : Migration 
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
