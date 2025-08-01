@@ -14,7 +14,7 @@ namespace WebApi.Controllers;
 public class AccountController(IAuthService authService, IAdminUserService adminUserService) : ControllerBase
 {
     [HttpPost("add-user")]
-    [Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = Roles.Admin)] 
     public async Task<Response<GetUserDto>> AddUser(CreateUserDto createUserDto)
     {
         var creatorRole = User.IsInRole(Roles.Admin) ? Roles.Admin : "Unknown";
