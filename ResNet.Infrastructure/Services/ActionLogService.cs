@@ -11,6 +11,7 @@ using ResNet.Domain.Entities;
 
 namespace Infrastructure.Services;
 
+
 public class ActionLogService(
     DataContext context,
     IMapper mapper,
